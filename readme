@@ -71,7 +71,7 @@ Abstact
 
 3. The ABNF grammar (RFC 2234) is:
 
-  file = record *(NL record) [NL]
+  file = record *(LF record) [LF]
 
   record = field *(COLON field)
 
@@ -98,7 +98,7 @@ Abstact
 
   BASICDATA = VCHAR_NOT_SPECIAL / ESCAPED_LITERAL / ESCAPED_NONPRINTABLE
 
-  ESCAPED_LITERAL = BACKSLASH (BACKSLASH / COLON / COMMA / EQUALS / NL)
+  ESCAPED_LITERAL = BACKSLASH (BACKSLASH / COLON / COMMA / EQUALS / LF)
 
   ESCAPED_NONPRINTABLE = BACKSLASH ("n" / "r" / "t" / BACKSLASH)
 
@@ -108,8 +108,6 @@ Abstact
   CR = %x0D ; as per section 6.1 of RFC 2234
 
   LF = %x0A ; as per section 6.1 of RFC 2234
-
-  NL = [CR] LF
 
 4. References
 
