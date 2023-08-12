@@ -1,0 +1,116 @@
+                                                                   M. Tuddenham
+                                                                   August 2023
+
+                        UNIX Delimiter Separated Values
+
+Abstact
+
+  This file documents the format used for UNIX Delimiter Separated Values
+(UDSV)
+
+1. Description
+
+  UNIX Delimiter Separated Values is a format for storing data in a text file.
+  It is similar to CSV, RFC 4180, but with notable differences, including
+  using a colon delimiter between fields, and its escapement mechanism. It is
+  designed to be easy to parse, generate, and to be human readable.
+
+  This format is non self-describing, i.e. the string "a,b,c" could be either
+  a single string of a list of strings. Aditionally, "1" could be a string
+  contaiing a number, an integer of any size, or a float of any size.
+
+
+2. Encoding
+
+2.1 Strings
+
+  Strings are the only supported base data type in this format, see section
+  2.4.
+
+2.2 Numbers
+
+  This format does not specify numerical values, it is up to the sofware
+  reading/writing the values to interperate a string as number. This allows
+  aribirary number formats to be stored, from hex values with or without a
+  format-indicating prefix to arbirary precision floats.
+
+2.3 Lists
+
+  Lists are a sequence of strings, separated by commas. The comma can be
+  escaped with a backslash.
+
+2.4 Maps
+
+  Maps are a sequence of key-value pairs, separated by commas. The key and
+  value are separated by an equals sign. The equals and comma characters can be
+  escaped with a backslash.
+
+2.5 Escaping
+
+  Backslash escaping can be used to insert a literal colon character
+  into a string value. Record continuation is implemented by ignoring
+  backslash-escaped newlines. and to allow embedding nonprintable character
+  data by C-style backslash escapes, more specifically "\n", "\r", "\t", "\b",
+  and "\\" representing a newline, carriage return, tab, backspace, and the
+  literal backslash character respectively.
+
+  Assailing the design of the CSV format, Eric Raymond contrasts a design with
+  an escape character: "This design gives us a single special case (the escape
+  character) to check for when parsing the file, and only a single action when
+  the escape is found (treat the following character as a literal). The latter
+  conveniently not only handles the separator character, but gives us a way
+  to handle the escape character and newlines for free." [1, p.138] Since the
+  UDSV format supports special backslash-escaped characters, it is has two
+  possibilities after reading a backslash character instead of one.
+
+  Escaping commas is not required unless the comma is part of a list or map,
+  and likewise escaping equals is not required unless the equals is part of a
+  map. However, as suggested above, the escaped character will be turned into a
+  literal. To insert a literal backslash, two backslashes is always needed. An
+  unknown escape sequence is an error.
+
+3. The ABNF grammar (RFC 2234) is:
+
+  file = record *(NL record) [NL]
+
+  record = field *(COLON field)
+
+  field = *STRINGDATA / list / map
+
+  list = *LISTDATA *(COMMA *LISTDATA)
+
+  map = map_item *(COMMA map_item)
+
+  map_item = *BASICDATA EQUALS *BASICDATA
+
+
+  COLON = ":"
+
+  COMMA = ","
+
+  EQUALS = "="
+
+  BACKSLASH = "/"
+
+  STRINGDATA = BASICDATA / COMMA / EQUALS
+
+  LISTDATA = BASICDATA / EQUALS
+
+  BASICDATA = VCHAR_NOT_SPECIAL / ESCAPED_LITERAL / ESCAPED_NONPRINTABLE
+
+  ESCAPED_LITERAL = BACKSLASH (BACKSLASH / COLON / COMMA / EQUALS / NL)
+
+  ESCAPED_NONPRINTABLE = BACKSLASH ("n" / "r" / "t" / "b" / BACKSLASH)
+
+  VCHAR_NOT_SPECIAL = %x20-2B / %x2D-2F / %x3B-3C / %x3E-5B / %x5D-7E
+    ; all printable characters except colon, comma, equals, and backslash
+
+  CR = %x0D ; as per section 6.1 of RFC 2234
+
+  LF = %x0A ; as per section 6.1 of RFC 2234
+
+  NL = [CR] LF
+
+4. References
+
+  [1] The Art of Unix Programming, Eric Steven Raymond
