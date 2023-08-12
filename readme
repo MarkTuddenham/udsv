@@ -50,9 +50,9 @@ Abstact
   Backslash escaping can be used to insert a literal colon character
   into a string value. Record continuation is implemented by ignoring
   backslash-escaped newlines. and to allow embedding nonprintable character
-  data by C-style backslash escapes, more specifically "\n", "\r", "\t", "\b",
-  and "\\" representing a newline, carriage return, tab, backspace, and the
-  literal backslash character respectively.
+  data by C-style backslash escapes, more specifically "\n", "\r", "\t", and
+  "\\" representing a newline, carriage return, tab, backspace, and the literal
+  backslash character respectively.
 
   Assailing the design of the CSV format, Eric Raymond contrasts a design with
   an escape character: "This design gives us a single special case (the escape
@@ -100,7 +100,7 @@ Abstact
 
   ESCAPED_LITERAL = BACKSLASH (BACKSLASH / COLON / COMMA / EQUALS / NL)
 
-  ESCAPED_NONPRINTABLE = BACKSLASH ("n" / "r" / "t" / "b" / BACKSLASH)
+  ESCAPED_NONPRINTABLE = BACKSLASH ("n" / "r" / "t" / BACKSLASH)
 
   VCHAR_NOT_SPECIAL = %x20-2B / %x2D-2F / %x3B-3C / %x3E-5B / %x5D-7E
     ; all printable characters except colon, comma, equals, and backslash
