@@ -6,7 +6,8 @@
 Abstact
 
   This file documents the format used for UNIX Delimiter Separated Values
-(UDSV)
+(UDSV), this format is used by many UNIX system files, notably `/etc/passwd`,
+`/etc/shadow`, `/etc/group`, and `/etc/inittab`.
 
 1. Description
 
