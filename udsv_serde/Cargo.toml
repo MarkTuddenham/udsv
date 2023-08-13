@@ -1,0 +1,12 @@
+[package]
+name = "udsv"
+authors = ["Mark Tuddenham <mark@tudders.com>"]
+version = "0.1.1"
+edition = "2021"
+
+[dependencies]
+serde = "1.0.174"
+thiserror = "1.0.44"
+
+[dev-dependencies]
+serde = {version="1.0.174", features= ["derive"]}

@@ -1,0 +1,62 @@
+                                                                   M. Tuddenham
+                                                                   August 2023
+
+                                   UDSV SerDe
+
+1. Introduction
+
+  This is a rust serde library for the UNIX Delimiter Separated Values (UDSV)
+  file format.
+
+2. Records vs File
+
+  `record_to_str`, and `record_from_str` handle just one record. In the future
+  there will be `to_str` and `from_str` to handle a whole file of records.
+
+3. Non-specified data types
+
+  While Numbers/Enums/Structs/Tuples aren't in the original specification, an
+  attempt has been made to best (de)serialise them here.
+
+3.1 Numbers
+
+  To do.
+
+3.2 Enums
+  Enums are always externally tagged.
+
+3.3 Struct
+  Structs are flattened, and the fields are colon-separated. Structs are never
+  tagged.
+
+3.4 Tuples
+
+  Tuples are (de)serialised identically to lists.
+
+3.5 Options
+
+  `None` is serialised as the empty string, `Some(x)` is just `x` serialised.
+  Options are lossy, i.e. there is no distinction between `Some(())`,
+  `Some("")`, and `None`.
+
+3.6 Booleans
+
+  Booleans are serialised as the strings "true" and "false".
+
+4. To do list
+
+  - Allow (de)serialising many records e.g. from a file.
+  - Add tracing to tests https://docs.rs/tracing-test/latest/tracing_test/
+  - Better errors - provide additional information in its error type, for
+    example the line and column at which the error occurred, the byte offset into
+    the input, or the current key being processed.
+  - Ser
+    - Disallow nesting
+  - De
+    - Allow derseriliasing into a &str
+    - Disallow nesting
+    - floats
+    - signed ints
+    - int/float overflow
+
+
